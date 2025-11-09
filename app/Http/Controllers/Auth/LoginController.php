@@ -1,5 +1,11 @@
 <?php
 
+// namespace App\Http\Controllers\Auth;
+
+// use App\Http\Controllers\Controller;
+// use App\Providers\RouteServiceProvider;
+// use Illuminate\Foundation\Auth\AuthenticatesUsers;
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -11,6 +17,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Modules\User\Entities\User\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+
 class LoginController extends Controller
 {
     /*
@@ -43,49 +50,51 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function redirectToMicrosoft()
+    public function redirectToGoogle()
     {
-        return Socialite::driver('azure')->redirect();
+        return Socialite::driver('google')->redirect();
     }
 
-    public function handleMicrosoftCallback(Request $request)
+    public function handleGoogleCallback(Request $request)
     {
+        $googleUser = Socialite::driver('google')->stateless()->user();
+        // dd($googleUser);
+        // Xử lý logic đăng nhập tại đây
         try {
-            // User::where('id', 12)->delete();
-            $microsoftUser = Socialite::driver('azure')->user();
-            $checkEmail = User::where('email', $microsoftUser->email)->count();
-            $fullName = $microsoftUser->getName();
+            $checkEmail = User::where('email', $googleUser->email)->count();
+            $fullName = $googleUser->name;
             $nameParts = explode(' ', $fullName, 2);
-            $firstName = $nameParts[0] ?? '';
-            $lastName = $nameParts[1] ?? '';
+            $firstName = array_pop($nameParts);
+            $lastName = implode(' ', $nameParts);
             if($checkEmail > 0){
-                return redirect("https://timesheet.greenviet.net/timesheet/#/login?token=".$microsoftUser->token."&e=".base64_encode($microsoftUser->email));
+                return redirect("https://demotimesheet.cuortech.com//#/login?token=".$googleUser->token."&e=".base64_encode($googleUser->email));
             } else {
                 $user = [];
                 $user['firstname'] = ucwords($firstName);
                 $user['lastname'] = ucwords($lastName);
-                $user['username'] = str_replace(' ', '', $fullName);
-                $user['email'] = $microsoftUser->email;
+                $user['username'] = explode('@', $googleUser->email, 2)[0];
+                $user['email'] = $googleUser->email;
                 $user['is_active'] = 1;
                 $user['email_verified'] = 1;
+                $user['permission'] = '""all""';
                 $user['user_generated_id'] = $this->getUserGeneratedId();
-                $user['password'] = "Greenviet2024@";
+                $user['password'] = "Cuor2024@";
                 $userData = $this->_createUserStub($user);
                 // dd($userData);
                 $userData['is_active'] = 1;
                 $userData['email_verified'] = 1;
                 $user = User::insert($userData);
-                DB::table('gv_user_role_department')->insert([
+                DB::table('cuor_user_role_department')->insert([
                     'user_id' => User::max('id'),
                     'department_id'=>2,
                     'role_id'=>2,
                 ]);
-                return redirect("https://timesheet.greenviet.net/timesheet/#/login?token=".$microsoftUser->token."&e=".base64_encode($microsoftUser->email));
-                // return redirect("https://timesheet.greenviet.net/timesheet/#/login?msg=".base64_encode('Email does not exist'));
+                return redirect("https://demotimesheet.cuortech.com//#/login?token=".$googleUser->token."&e=".base64_encode($googleUser->email));
+                // return redirect("https://demotimesheet.cuortech.com//#/login?msg=".base64_encode('Email does not exist'));
             }
         } catch (\Throwable $th) {
             dd($th);
-            return redirect("https://timesheet.greenviet.net/timesheet/#/login");
+            return redirect("https://demotimesheet.cuortech.com//#/login");
         }
         // Tìm hoặc tạo người dùng trong cơ sở dữ liệu
         // $user = User::firstOrCreate(
@@ -159,3 +168,4 @@ class LoginController extends Controller
         return $user;
     }
 }
+

@@ -67,6 +67,8 @@ Route::get('/queue/work', function () {
     return "Done!";
 });
 
+Route::get('/login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('/login/google/callback', [LoginController::class, 'handleGoogleCallback']);
 Route::get('/login/microsoft', [LoginController::class, 'redirectToMicrosoft'])->name('login.microsoft');
 Route::get('/login/microsoft/callback', [LoginController::class, 'handleMicrosoftCallback']);
 Route::get('/test', function () {

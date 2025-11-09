@@ -13,6 +13,7 @@
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^9.19",
+        "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^4.2",
         "nicolaslopezj/searchable": "1.*",
