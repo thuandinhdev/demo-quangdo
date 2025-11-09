@@ -78,13 +78,13 @@ class LoginController extends Controller
                 $user['email_verified'] = 1;
                 $user['permission'] = '""all""';
                 $user['user_generated_id'] = $this->getUserGeneratedId();
-                $user['password'] = "Cuor2024@";
+                $user['password'] = "Greenviet2024@";
                 $userData = $this->_createUserStub($user);
                 // dd($userData);
                 $userData['is_active'] = 1;
                 $userData['email_verified'] = 1;
                 $user = User::insert($userData);
-                DB::table('cuor_user_role_department')->insert([
+                DB::table('gv_user_role_department')->insert([
                     'user_id' => User::max('id'),
                     'department_id'=>2,
                     'role_id'=>2,
