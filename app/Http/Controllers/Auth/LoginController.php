@@ -67,7 +67,7 @@ class LoginController extends Controller
             $firstName = array_pop($nameParts);
             $lastName = implode(' ', $nameParts);
             if($checkEmail > 0){
-                return redirect("https://demotimesheet.cuortech.com//#/login?token=".$googleUser->token."&e=".base64_encode($googleUser->email));
+                return redirect("https://demotimesheet.cuortech.com/timesheet/#/login?token=".$googleUser->token."&e=".base64_encode($googleUser->email));
             } else {
                 $user = [];
                 $user['firstname'] = ucwords($firstName);
@@ -89,12 +89,12 @@ class LoginController extends Controller
                     'department_id'=>2,
                     'role_id'=>2,
                 ]);
-                return redirect("https://demotimesheet.cuortech.com//#/login?token=".$googleUser->token."&e=".base64_encode($googleUser->email));
-                // return redirect("https://demotimesheet.cuortech.com//#/login?msg=".base64_encode('Email does not exist'));
+                return redirect("https://demotimesheet.cuortech.com/timesheet/#/login?token=".$googleUser->token."&e=".base64_encode($googleUser->email));
+                // return redirect("https://demotimesheet.cuortech.com/timesheet/#/login?msg=".base64_encode('Email does not exist'));
             }
         } catch (\Throwable $th) {
             dd($th);
-            return redirect("https://demotimesheet.cuortech.com//#/login");
+            return redirect("https://demotimesheet.cuortech.com/timesheet/#/login");
         }
         // Tìm hoặc tạo người dùng trong cơ sở dữ liệu
         // $user = User::firstOrCreate(
