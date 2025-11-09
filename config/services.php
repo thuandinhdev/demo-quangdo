@@ -52,4 +52,13 @@ return [
         'tenant' => 'common',
         'proxy' => env('PROXY')  // optionally
     ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT'),
+        'drive' => [
+            'credentials' => env('GOOGLE_DRIVE_CREDENTIALS_PATH'),
+        ],
+    ],
 ];
